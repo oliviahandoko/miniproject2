@@ -1,0 +1,40 @@
+Package: fec
+Title: Campaign finance for Federal Elections
+Version: 0.0.0.9014
+Date: 2017-08-31
+Authors@R: c(
+    person("Benjamin S.", "Baumer", email = "ben.baumer@gmail.com",
+      role = c("aut", "cre")),
+    person("Eva", "Gjekmarkaj", role = "aut")
+  )
+Description: Campaign finance data from the Federal Election Commission records
+    candidates for federal elections, the committees that spend money on behalf 
+    of (or against)
+    those candidates, and donations from individuals to those committees. 
+    This package
+    performs ETL operations for these data to facilitate reproducible analysis. 
+Depends:
+    R (>= 3.2.0),
+    etl
+Imports:
+    DBI, 
+    dplyr,
+    methods,
+    readr,
+    readxl,
+    tidyr
+Suggests:
+    knitr,
+    magrittr,
+    rmarkdown,
+    RSQLite,
+    RPostgreSQL,
+    RMySQL,
+    testthat
+URL: http://github.com/beanumber/fec
+BugReports: https://github.com/beanumber/fec/issues
+VignetteBuilder: knitr
+License: CC0
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1

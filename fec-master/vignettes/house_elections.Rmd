@@ -1,0 +1,72 @@
+---
+title: "Campaign donations from the Federal Election Commission"
+author: "Eva Gjekmarkaj, Ben Baumer"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## FEC 
+
+This is a vignette on how to use the FEC package and conduct analysis for questions such as contributions by individuals/special interests for any given election year. Below I will use the 2014 data to address the following questions:
+  
+  1. How much money did each State raise?
+
+  2. How much money in aggregate did both parties raise in the 2014 midterm election?
+  
+  3. How much money was contributed from people to pacs for each committee?
+
+## Connect to a local or remote database 
+
+```{r message=FALSE}
+library(fec)
+db <- src_mysql_cnf(dbname = "fec")
+fec <- etl("fec", db = db, dir = "~/dumps/fec")
+fec
+```
+
+
+## ETL
+
+  - Doing it all at once
+```{r message=FALSE, eval=FALSE, warning=FALSE}
+fec %>%
+  etl_create(years = 2014)
+```
+
+- Note: For more information on [how the ETL Framework works](https://github.com/beanumber/etl)
+
+### How much money did the residents of each state contribute?
+
+```{r, eval=FALSE}
+fec %>%
+  tbl("individuals") %>%
+  group_by(state) %>%
+  summarise(Total = sum(transaction_amt)) %>%
+  arrange(desc(Total))
+```
+
+- Note: There were an additional 8 classifications under the 'state' column. 
+
+### How much money in aggregate did political parties raise the 2016 presidential election?
+
+```{r, eval=FALSE}
+committees <- fec %>% tbl("committees")
+individuals <- fec %>% tbl("individuals")
+
+committees %>%
+  inner_join(individuals, by = "cmte_id") %>%
+  group_by(cmte_party_affiliation) %>%
+  summarise(Total = sum(transaction_amt, na.rm = TRUE))
+```
+
+3. How much money was contributed from people to pacs for each committee?
+
+```{r eval=FALSE, results="hide"}
+fec %>%
+  tbl("people_to_pacs") %>%
+  select(party,cmte_name, as.double(total_raised))
+```
