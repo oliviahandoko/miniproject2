@@ -3,6 +3,7 @@ title: "Mini Project 2"
 output: html_document
 ---
 hello
+hi
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
